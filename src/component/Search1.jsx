@@ -11,8 +11,6 @@ import {
   Building2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Lottie from "lottie-react";
-import animationData from "../assets/animation2.json"; // Make sure the path is correct
 
 const Search1 = () => {
   const [query, setQuery] = useState("");
@@ -65,13 +63,6 @@ const Search1 = () => {
       animate={{ backgroundColor: isFocused || fixedAtTop ? "white" : "black" }}
       transition={{ duration: 0.5 }}
     >
-      {/* 🎥 Background Lottie Animation */}
-      {!fixedAtTop && (
-        <div className="w-64 mb-8 z-10 scale-100">
-          <Lottie animationData={animationData} loop autoplay />
-        </div>
-      )}
-
       {/* 🔍 Animated Search Box */}
       <motion.div
         className="absolute left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg transition-all"
