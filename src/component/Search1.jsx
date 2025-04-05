@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Lightbulb, Briefcase, Banknote, GraduationCap, Heart, Globe, Building2 } from "lucide-react";
+import {
+  X,
+  Lightbulb,
+  Briefcase,
+  Banknote,
+  GraduationCap,
+  Heart,
+  Globe,
+  Building2,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Lottie from "lottie-react";
+import animationData from "../assets/animation2.json"; // Make sure the path is correct
 
 const Search1 = () => {
   const [query, setQuery] = useState("");
@@ -17,10 +28,10 @@ const Search1 = () => {
     "उद्यामी योजना से क्या लाभ प्राप्त होते हैं?": <GraduationCap className="mr-2 text-purple-500" />,
     "उद्यामी योजना के बारे में अधिक जानकारी कहाँ प्राप्त करें?": <Globe className="mr-2 text-teal-500" />,
     "उद्यामी योजना में पीएमईजीपी की भूमिका क्या है?": <Building2 className="mr-2 text-red-500" />,
-      "How does Udyami Yojna support digital initiatives?": <Heart className="mr-2 text-pink-500" />,
+    "How does Udyami Yojna support digital initiatives?": <Heart className="mr-2 text-pink-500" />,
     "What training and mentorship opportunities does Udyami Yojna offer?": <Briefcase className="mr-2 text-indigo-500" />,
-    "How is Udyami Yojna evaluated and ranked?": <GraduationCap className="mr-2 text-orange-500" />,
-  };
+    "How is Udyami Yojna evaluated and ranked?": <GraduationCap className="mr-2 text-orange-500" />,
+  };
 
   const allSchemes = Object.keys(schemeIcons);
 
@@ -50,11 +61,18 @@ const Search1 = () => {
   return (
     <motion.div
       className="flex flex-col items-center justify-center h-screen w-full transition-colors"
-      initial={{ backgroundColor: "black" }} // 🔥 Start with black background
-      animate={{ backgroundColor: isFocused || fixedAtTop ? "white" : "black" }} // 🔥 Change to white when focused
-      transition={{ duration: 0.5 }} // Smooth transition
+      initial={{ backgroundColor: "black" }}
+      animate={{ backgroundColor: isFocused || fixedAtTop ? "white" : "black" }}
+      transition={{ duration: 0.5 }}
     >
-      {/* Animated Search Box */}
+      {/* 🎥 Background Lottie Animation */}
+      {!fixedAtTop && (
+        <div className="w-64 mb-8 z-10 scale-100">
+          <Lottie animationData={animationData} loop autoplay />
+        </div>
+      )}
+
+      {/* 🔍 Animated Search Box */}
       <motion.div
         className="absolute left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg transition-all"
         initial={{ top: "50%", width: "600px", padding: "25px" }}
@@ -78,7 +96,7 @@ const Search1 = () => {
             onKeyDown={handleKeyPress}
           />
 
-          {/* Clear Button */}
+          {/* ❌ Clear Button */}
           {query && (
             <button
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
@@ -92,7 +110,7 @@ const Search1 = () => {
             </button>
           )}
 
-          {/* Suggestions Dropdown */}
+          {/* 📄 Suggestions Dropdown */}
           <AnimatePresence>
             {isFocused && suggestions.length > 0 && (
               <motion.div
