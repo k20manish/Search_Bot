@@ -15,11 +15,12 @@ const ChatBot = () => {
       ? [{ text: initialQuery, type: "user", timestamp: new Date().toLocaleTimeString() }]
       : []
   );
-  const [input, setInput] = useState(initialQuery);
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const abortControllerRef = useRef(null);
   const [userId, setUserId] = useState(localStorage.getItem("user_id") || "");
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("user_id");
@@ -28,7 +29,7 @@ const ChatBot = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, loading]);
 
   const fetchChatbotResponse = useCallback(
     async (query) => {
@@ -68,6 +69,14 @@ const ChatBot = () => {
             timestamp: new Date().toLocaleTimeString(),
           },
         ]);
+
+        if (data.recommended_question) {
+          const parsedSuggestions = data.recommended_question
+            .split("\n")
+            .map((q) => q.replace(/^\d+\.\s*/, "").trim())
+            .filter(Boolean);
+          setSuggestions(parsedSuggestions);
+        }
       } catch (error) {
         if (error.name !== "AbortError") {
           console.error("Chatbot Error:", error);
@@ -89,6 +98,13 @@ const ChatBot = () => {
 
   useEffect(() => {
     if (initialQuery) {
+      setMessages([
+        {
+          text: initialQuery,
+          type: "user",
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
       fetchChatbotResponse(initialQuery);
     }
   }, [initialQuery, fetchChatbotResponse]);
@@ -103,10 +119,14 @@ const ChatBot = () => {
     setInput("");
   }, [input, fetchChatbotResponse]);
 
+  const handleSuggestionClick = (suggestion) => {
+    setInput(suggestion);
+    handleSendMessage();
+  };
+
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      {/* 🌌 Background Animation */}
-      <div className="fixed inset-0 -z-10 bg-black ">
+      <div className="fixed inset-0 -z-10 bg-black">
         <Lottie
           animationData={animationData}
           loop
@@ -115,7 +135,6 @@ const ChatBot = () => {
         />
       </div>
 
-      {/* Chat UI */}
       <div className="flex flex-col items-center justify-center h-full opacity-100">
         <motion.div
           className="w-full max-w-lg bg-white/80 backdrop-blur-lg shadow-lg rounded-lg overflow-hidden flex flex-col border border-gray-300"
@@ -123,18 +142,17 @@ const ChatBot = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          {/* Header */}
           <div className="bg-gray-200 text-gray-800 flex items-center p-4 border-b border-gray-300">
             <button
               onClick={() => navigate(-1)}
               className="text-gray-700 hover:opacity-80"
             >
-              <ArrowLeft size={24} />
+              <ArrowLeft className="text-black font-medium" size={24} />
             </button>
             <div className="flex items-center justify-between space-x-56 px-4">
-              <h2 className="text-3xl font-bold font-title bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-transparent bg-clip-text drop-shadow-md">
-                e-Udyami
-              </h2>
+            <h2 className="text-3xl font-bold font-title bg-gradient-to-r from-gray-500 via-gray-600 to-gray-800 text-transparent bg-clip-text drop-shadow-md">
+  e-Udyami
+</h2>
               <img
                 src={logo}
                 alt="Logo"
@@ -143,7 +161,7 @@ const ChatBot = () => {
             </div>
           </div>
 
-          {/* Chat Messages */}
+          {/* Chat Section */}
           <div className="h-96 overflow-y-auto p-4 space-y-3">
             {messages.map((msg, index) => (
               <motion.div
@@ -179,11 +197,57 @@ const ChatBot = () => {
                 )}
               </motion.div>
             ))}
-            {loading && <p className="text-gray-500 text-center">Typing...</p>}
+
+            {/* Loading animation at the top like a bot typing */}
+            {loading && (
+              <motion.div
+                className="flex items-start space-x-2 justify-start"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xl">
+                  🤖
+                </div>
+                <div className="p-3 max-w-xs rounded-lg shadow-sm bg-gray-200 text-black">
+                  <div className="flex space-x-1">
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                    <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
+          {/* Suggestions in Grid (3 per row) */}
+          {suggestions.length > 0 && (
+  <div className="px-4 pb-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {suggestions.map((s, i) => (
+        <div
+          key={i}
+          className="relative cursor-pointer px-4 py-3 min-h-[60px] bg-white border border-gray-300 rounded-xl shadow-sm hover:bg-gray-100 hover:scale-105 transition duration-200 transform"
+          onClick={() => handleSuggestionClick(s)}
+        >
+          <span className="absolute top-3 left-2 text-gray-600 text-base">💬</span>
+          <div className="pl-6 pt-1 text-xs text-gray-800 break-words line-clamp-3">
+            {s}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+          {/* Input Section */}
           <div className="flex border-t p-3 bg-gray-100">
             <input
               type="text"
