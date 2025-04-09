@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 import animationData from "../assets/animation2.json";
 import logo from "../assets/image.jpg";
+import ReactMarkdown from 'react-markdown';
 
 const ChatBot = () => {
   const location = useLocation();
@@ -12,7 +13,13 @@ const ChatBot = () => {
   const initialQuery = location.state?.query || "";
   const [messages, setMessages] = useState(
     initialQuery
-      ? [{ text: initialQuery, type: "user", timestamp: new Date().toLocaleTimeString() }]
+      ? [
+          {
+            text: initialQuery,
+            type: "user",
+            timestamp: new Date().toLocaleTimeString(),
+          },
+        ]
       : []
   );
   const [input, setInput] = useState("");
@@ -137,7 +144,7 @@ const ChatBot = () => {
 
       <div className="flex flex-col items-center justify-center h-full opacity-100">
         <motion.div
-          className="w-full max-w-lg bg-white/80 backdrop-blur-lg shadow-lg rounded-lg overflow-hidden flex flex-col border border-gray-300"
+          className="w-full max-w-lg bg-gray-300 backdrop-blur-lg shadow-lg rounded-lg overflow-hidden flex flex-col border border-gray-300"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -150,9 +157,9 @@ const ChatBot = () => {
               <ArrowLeft className="text-black font-medium" size={24} />
             </button>
             <div className="flex items-center justify-between space-x-56 px-4">
-            <h2 className="text-3xl font-bold font-title bg-gradient-to-r from-gray-500 via-gray-600 to-gray-800 text-transparent bg-clip-text drop-shadow-md">
-  e-Udyami
-</h2>
+              <h2 className="text-3xl font-bold font-title bg-gradient-to-r from-gray-500 via-gray-600 to-gray-800 text-transparent bg-clip-text drop-shadow-md">
+                e-Udyami
+              </h2>
               <img
                 src={logo}
                 alt="Logo"
@@ -185,7 +192,16 @@ const ChatBot = () => {
                       : "bg-gray-200 text-black"
                   }`}
                 >
-                  <p>{msg.text}</p>
+                  <ReactMarkdown
+  components={{
+    ul: ({ children }) => <ul className="list-disc pl-5 my-2">{children}</ul>,
+    li: ({ children }) => <li className="mb-1">{children}</li>,
+    strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+    p: ({ children }) => <p className="mb-2">{children}</p>,
+  }}
+>
+  {msg.text}
+</ReactMarkdown>
                   <p className="text-xs text-gray-400 text-right mt-1">
                     {msg.timestamp}
                   </p>
@@ -224,28 +240,25 @@ const ChatBot = () => {
 
           {/* Suggestions in Grid (3 per row) */}
           {suggestions.length > 0 && (
-  <div className="px-4 pb-4">
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {suggestions.map((s, i) => (
-        <div
-          key={i}
-          className="relative cursor-pointer px-4 py-3 min-h-[60px] bg-white border border-gray-300 rounded-xl shadow-sm hover:bg-gray-100 hover:scale-105 transition duration-200 transform"
-          onClick={() => handleSuggestionClick(s)}
-        >
-          <span className="absolute top-3 left-2 text-gray-600 text-base">💬</span>
-          <div className="pl-6 pt-1 text-xs text-gray-800 break-words line-clamp-3">
-            {s}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-
-
-
-
+            <div className="px-4 pb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {suggestions.map((s, i) => (
+                  <div
+                    key={i}
+                    className="relative cursor-pointer px-4 py-3 min-h-[60px] bg-white border border-gray-300 rounded-xl shadow-sm hover:bg-gray-100 hover:scale-105 transition duration-200 transform"
+                    onClick={() => handleSuggestionClick(s)}
+                  >
+                    <span className="absolute top-3 left-2 text-gray-600 text-base">
+                      💬
+                    </span>
+                    <div className="pl-6 pt-1 text-xs text-gray-800 break-words line-clamp-3">
+                      {s}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Input Section */}
           <div className="flex border-t p-3 bg-gray-100">
