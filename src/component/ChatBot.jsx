@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Send, ArrowLeft } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion,AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
 import animationData from "../assets/animation2.json";
 import logo from "../assets/image.jpg";
@@ -28,6 +28,8 @@ const ChatBot = () => {
   const abortControllerRef = useRef(null);
   const [userId, setUserId] = useState(localStorage.getItem("user_id") || "");
   const [suggestions, setSuggestions] = useState([]);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("user_id");
@@ -127,8 +129,17 @@ const ChatBot = () => {
   }, [input, fetchChatbotResponse]);
 
   const handleSuggestionClick = (suggestion) => {
-    setInput(suggestion);
-    handleSendMessage();
+    // Add the user's message
+    setMessages((prev) => [
+      ...prev,
+      { text: suggestion, type: "user", timestamp: new Date().toLocaleTimeString() },
+    ]);
+  
+    // Directly fetch the response for the clicked suggestion
+    fetchChatbotResponse(suggestion);
+  
+    // Clear the input (optional)
+    setInput("");
   };
 
   return (
@@ -239,26 +250,54 @@ const ChatBot = () => {
           </div>
 
           {/* Suggestions in Grid (3 per row) */}
-          {suggestions.length > 0 && (
-            <div className="px-4 pb-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {suggestions.map((s, i) => (
-                  <div
-                    key={i}
-                    className="relative cursor-pointer px-4 py-3 min-h-[60px] bg-white border border-gray-300 rounded-xl shadow-sm hover:bg-gray-100 hover:scale-105 transition duration-200 transform"
-                    onClick={() => handleSuggestionClick(s)}
-                  >
-                    <span className="absolute top-3 left-2 text-gray-600 text-base">
-                      💬
-                    </span>
-                    <div className="pl-6 pt-1 text-xs text-gray-800 break-words line-clamp-3">
-                      {s}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <AnimatePresence>
+  {suggestions.length > 0 && (
+    <motion.div
+      key="suggestions"
+      className="w-full px-6 pt-2 pb-5 bg-gray-100 border-t border-gray-300"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
+      <h3 className="text-lg font-semibold text-gray-700 mb-3">
+        💡 Recommended Questions
+      </h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {suggestions.map((s, i) => (
+          <motion.div
+          key={i}
+          whileHover={{ scale: 1.05 }}
+          className="relative group cursor-pointer p-4 min-h-[70px] bg-white border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 transition-all duration-300"
+          onClick={() => handleSuggestionClick(s)}
+        >
+          <div className="absolute top-2 left-2 text-gray-400 text-lg">💬</div>
+          <div className="pl-7 text-sm text-gray-800 leading-snug tracking-tight line-clamp-2">
+            {s}
+          </div>
+        
+          {/* Tooltip on hover */}
+          <div className="absolute left-1/2 -top-10 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 whitespace-pre-line max-w-sm">
+            {s}
+          </div>
+        </motion.div>
+        
+        ))}
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+
+
+
+
+
+
+
+
+
+
 
           {/* Input Section */}
           <div className="flex border-t p-3 bg-gray-100">
