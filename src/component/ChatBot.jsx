@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Send, ArrowLeft } from "lucide-react";
-import { motion,AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
-import animationData from "../assets/animation2.json";
+import animationData from "../assets/142815-780943566_small.mp4";
 import logo from "../assets/image.jpg";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
+import google_logo from "../assets/google_Logo.jpeg";
 
 const ChatBot = () => {
   const location = useLocation();
@@ -29,7 +30,8 @@ const ChatBot = () => {
   const [userId, setUserId] = useState(localStorage.getItem("user_id") || "");
   const [suggestions, setSuggestions] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-
+  const [language,setLanguage] = useState(false);
+  const [show,setShow] = useState(false);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("user_id");
@@ -132,25 +134,40 @@ const ChatBot = () => {
     // Add the user's message
     setMessages((prev) => [
       ...prev,
-      { text: suggestion, type: "user", timestamp: new Date().toLocaleTimeString() },
+      {
+        text: suggestion,
+        type: "user",
+        timestamp: new Date().toLocaleTimeString(),
+      },
     ]);
-  
+
     // Directly fetch the response for the clicked suggestion
     fetchChatbotResponse(suggestion);
-  
+
     // Clear the input (optional)
     setInput("");
   };
 
+  const handleLanguage = () =>{
+     setShow(!show);
+  }
+
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       <div className="fixed inset-0 -z-10 bg-black">
-        <Lottie
+        {/* <Lottie
           animationData={animationData}
           loop
           autoplay
           className="w-full h-full object-cover scale-100"
-        />
+        /> */}
+        <video
+          autoPlay
+          muted
+          loop
+          src={animationData}
+          className="w-full h-full object-cover scale-100"
+        ></video>
       </div>
 
       <div className="flex flex-col items-center justify-center h-full opacity-100">
@@ -171,11 +188,11 @@ const ChatBot = () => {
               <h2 className="text-3xl font-bold font-title bg-gradient-to-r from-gray-500 via-gray-600 to-gray-800 text-transparent bg-clip-text drop-shadow-md">
                 e-Udyami
               </h2>
-              <img
-                src={logo}
-                alt="Logo"
-                className="h-12 w-12 rounded-full border border-white shadow-sm"
-              />
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="h-12 w-12 rounded-full border border-white shadow-sm"
+                />  
             </div>
           </div>
 
@@ -204,15 +221,21 @@ const ChatBot = () => {
                   }`}
                 >
                   <ReactMarkdown
-  components={{
-    ul: ({ children }) => <ul className="list-disc pl-5 my-2">{children}</ul>,
-    li: ({ children }) => <li className="mb-1">{children}</li>,
-    strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
-    p: ({ children }) => <p className="mb-2">{children}</p>,
-  }}
->
-  {msg.text}
-</ReactMarkdown>
+                    components={{
+                      ul: ({ children }) => (
+                        <ul className="list-disc pl-5 my-2">{children}</ul>
+                      ),
+                      li: ({ children }) => (
+                        <li className="mb-1">{children}</li>
+                      ),
+                      strong: ({ children }) => (
+                        <strong className="font-semibold">{children}</strong>
+                      ),
+                      p: ({ children }) => <p className="mb-2">{children}</p>,
+                    }}
+                  >
+                    {msg.text}
+                  </ReactMarkdown>
                   <p className="text-xs text-gray-400 text-right mt-1">
                     {msg.timestamp}
                   </p>
@@ -251,72 +274,91 @@ const ChatBot = () => {
 
           {/* Suggestions in Grid (3 per row) */}
           <AnimatePresence>
-  {suggestions.length > 0 && (
-    <motion.div
-      key="suggestions"
-      className="w-full px-6 pt-2 pb-5 bg-gray-100 border-t border-gray-300"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
-      <h3 className="text-lg font-semibold text-gray-700 mb-3">
-        💡 Recommended Questions
-      </h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {suggestions.map((s, i) => (
-          <motion.div
-          key={i}
-          whileHover={{ scale: 1.05 }}
-          className="relative group cursor-pointer p-4 min-h-[70px] bg-white border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 transition-all duration-300"
-          onClick={() => handleSuggestionClick(s)}
-        >
-          <div className="absolute top-2 left-2 text-gray-400 text-lg">💬</div>
-          <div className="pl-7 text-sm text-gray-800 leading-snug tracking-tight line-clamp-2">
-            {s}
-          </div>
-        
-          {/* Tooltip on hover */}
-          <div className="absolute left-1/2 -top-10 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 whitespace-pre-line max-w-sm">
-            {s}
-          </div>
-        </motion.div>
-        
-        ))}
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+            {suggestions.length > 0 && (
+              <motion.div
+                key="suggestions"
+                className="w-full px-6 pt-2 pb-5 bg-gray-100 border-t border-gray-300"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                  💡 Recommended Questions
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {suggestions.map((s, i) => (
+                    <motion.div
+                      key={i}
+                      whileHover={{ scale: 1.05 }}
+                      className="relative group cursor-pointer p-4 min-h-[70px] bg-white border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 transition-all duration-300"
+                      onClick={() => handleSuggestionClick(s)}
+                    >
+                      <div className="absolute top-2 left-2 text-gray-400 text-lg">
+                        💬
+                      </div>
+                      <div className="pl-7 text-sm text-gray-800 leading-snug tracking-tight line-clamp-2">
+                        {s}
+                      </div>
 
-
-
-
-
-
-
-
-
-
-
+                      {/* Tooltip on hover */}
+                      <div className="w-24 absolute left-1/2 -top-20 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 whitespace-pre-line max-w-sm">
+                        {s}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Input Section */}
-          <div className="flex border-t p-3 bg-gray-100">
-            <input
-              type="text"
-              className="flex-1 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
-              placeholder="Type your message..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-            />
-            <button
-              className="bg-gray-800 text-white px-6 rounded-r-lg hover:bg-gray-900 flex items-center justify-center"
-              onClick={handleSendMessage}
-              disabled={loading}
-            >
-              <Send size={20} />
-            </button>
-          </div>
+         {/* Input Section */}
+{/* Input Section */}
+{/* Input Section */}
+<div className="flex items-center border-t p-3 bg-gray-100 space-x-2">
+  {/* Input Field */}
+  <input
+    type="text"
+    className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+    placeholder="Type your message..."
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+  />
+
+  {/* Send Button just right of input */}
+  <button
+    className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 flex items-center justify-center"
+    onClick={handleSendMessage}
+    disabled={loading}
+  >
+    <Send size={20} />
+  </button>
+
+  {/* Language Buttons on the far right */}
+  <div className="flex space-x-2">
+    <button
+      onClick={() => setLanguage(false)}
+      className={`px-3 py-1 rounded-lg text-sm font-semibold ${
+        !language ? "bg-gray-800 text-white" : "bg-white text-gray-800 border border-gray-300"
+      } hover:shadow`}
+    >
+      EN
+    </button>
+    <button
+      onClick={() => setLanguage(true)}
+      className={`px-3 py-1 rounded-lg text-sm font-semibold ${
+        language ? "bg-gray-800 text-white" : "bg-white text-gray-800 border border-gray-300"
+      } hover:shadow`}
+    >
+      HI
+    </button>
+  </div>
+</div>
+
+
+
         </motion.div>
       </div>
     </div>
