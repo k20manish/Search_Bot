@@ -2,11 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Send, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Lottie from "lottie-react";
 import animationData from "../assets/142815-780943566_small.mp4";
 import logo from "../assets/image.jpg";
 import ReactMarkdown from "react-markdown";
-import google_logo from "../assets/google_Logo.jpeg";
+ 
 
 const ChatBot = () => {
   const location = useLocation();
