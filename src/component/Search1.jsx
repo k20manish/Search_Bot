@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   X,
@@ -12,37 +12,6 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// 🔮 Animated Background Component
-const AnimatedBackground = () => {
-  const orbs = Array.from({ length: 6 });
-
-  return (
-    <div className="absolute inset-0 z-0 overflow-hidden">
-      {orbs.map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-60 h-60 bg-gradient-to-br from-purple-500 to-blue-500 opacity-30 rounded-full blur-3xl"
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            scale: 0.8 + Math.random() * 0.4,
-          }}
-          animate={{
-            x: [Math.random() * window.innerWidth, Math.random() * window.innerWidth],
-            y: [Math.random() * window.innerHeight, Math.random() * window.innerHeight],
-            rotate: 360,
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 20 + Math.random() * 10,
-            ease: "linear",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
 const Search1 = () => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -50,6 +19,8 @@ const Search1 = () => {
   const [fixedAtTop, setFixedAtTop] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const navigate = useNavigate();
+
+  const searchBoxRef = useRef(null); // Ref for detecting outside click
 
   const schemeIcons = {
     "What is Udyami Yojna?": <Lightbulb className="mr-2 text-yellow-500" />,
@@ -76,6 +47,19 @@ const Search1 = () => {
     }
   }, [query]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
+        setIsFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleSuggestionClick = (suggestion) => {
     const index = suggestions.indexOf(suggestion);
     setSelectedIndex(index);
@@ -93,46 +77,30 @@ const Search1 = () => {
     }
   };
 
-  const showFancyBackground = isFocused || fixedAtTop;
-
   return (
-    <div
-      className={`relative h-screen w-full overflow-hidden transition-colors duration-700 ease-in-out ${
-        showFancyBackground
-          ? "bg-gradient-to-br from-[#f8fafc] via-[#e0f2fe] to-[#f0fdfa]"
-          : "bg-black"
-      }`}
-    >
-      {!showFancyBackground && <AnimatedBackground />}
-
-      {showFancyBackground && (
-        <>
-          <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-blue-200 rounded-full filter blur-3xl opacity-40 z-0"></div>
-          <div className="absolute bottom-[-100px] right-[-100px] w-[300px] h-[300px] bg-green-200 rounded-full filter blur-3xl opacity-40 z-0"></div>
-        </>
-      )}
-
+    <div className="relative h-screen w-full bg-white">
       <motion.div
-        className="flex flex-col items-center justify-start pt-24 h-full w-full z-10 relative transition-colors"
+        className="flex flex-col items-center justify-start pt-24 h-full w-full relative"
         initial={{ backgroundColor: "transparent" }}
-        animate={{ backgroundColor: showFancyBackground ? "white" : "transparent" }}
+        animate={{ backgroundColor: "white" }}
         transition={{ duration: 0.5 }}
       >
         <motion.div
-          className="absolute left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-full transition-all"
+          ref={searchBoxRef}
+          className="absolute left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-full"
           initial={{ top: "50%", width: "500px", padding: "15px" }}
           animate={{
             top: fixedAtTop ? "10%" : isFocused ? "10%" : "50%",
             width: "500px",
             padding: "15px",
-            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)",
+            boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)",
           }}
           transition={{ duration: 0.1, ease: "easeInOut" }}
         >
-          <div className="relative">
+          <div className="relative ">
             <input
               type="text"
-              className="w-full py-2 px-4 border border-gray-300 rounded-full outline-none text-base focus:ring-2 focus:ring-gray-200 transition-all"
+              className="w-full py-2 px-4 border  border-gray-300 rounded-full outline-none text-base focus:ring-2 focus:ring-gray-200 transition-all"
               placeholder="Search for a scheme..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}

@@ -30,8 +30,8 @@ const ChatBot = () => {
   const [userId, setUserId] = useState(localStorage.getItem("user_id") || "");
   const [suggestions, setSuggestions] = useState([]);
   const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [language,setLanguage] = useState(false);
-  const [show,setShow] = useState(false);
+  const [language, setLanguage] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("user_id");
@@ -148,9 +148,9 @@ const ChatBot = () => {
     setInput("");
   };
 
-  const handleLanguage = () =>{
-     setShow(!show);
-  }
+  const handleLanguage = () => {
+    setShow(!show);
+  };
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -184,15 +184,15 @@ const ChatBot = () => {
             >
               <ArrowLeft className="text-black font-medium" size={24} />
             </button>
-            <div className="flex items-center justify-between space-x-56 px-4">
+            <div className="flex items-center justify-between space-x-56 px-4 h-6">
               <h2 className="text-3xl font-bold font-title bg-gradient-to-r from-gray-500 via-gray-600 to-gray-800 text-transparent bg-clip-text drop-shadow-md">
                 e-Udyami
               </h2>
-                <img
-                  src={logo}
-                  alt="Logo"
-                  className="h-12 w-12 rounded-full border border-white shadow-sm"
-                />  
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-12 w-12 rounded-full border border-white shadow-sm"
+              />
             </div>
           </div>
 
@@ -209,12 +209,12 @@ const ChatBot = () => {
                 transition={{ duration: 0.3 }}
               >
                 {msg.type === "bot" && (
-                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xl">
+                  <div className="w-8 h- rounded-full bg-gray-300 flex items-center justify-center text-xl">
                     🤖
                   </div>
                 )}
                 <div
-                  className={`p-3 max-w-xs rounded-lg shadow-sm ${
+                  className={`p-2 max-w-xs rounded-lg shadow-sm  ${
                     msg.type === "user"
                       ? "bg-gray-800 text-white"
                       : "bg-gray-200 text-black"
@@ -277,24 +277,24 @@ const ChatBot = () => {
             {suggestions.length > 0 && (
               <motion.div
                 key="suggestions"
-                className="w-full px-6 pt-2 pb-5 bg-gray-100 border-t border-gray-300"
-                initial={{ opacity: 0, y: 20 }}
+                className="w-full px-6 pt-2 pb-5 bg-gray-100 border-t border-gray-300 "
+                initial={{ opacity: 0, y: 2 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                <h3 className="text-md font-semibold text-gray-700 mb-2">
                   💡 Recommended Questions
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 h-14">
                   {suggestions.map((s, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ scale: 1.05 }}
-                      className="relative group cursor-pointer p-4 min-h-[70px] bg-white border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 transition-all duration-300"
+                      className="relative group cursor-pointer p-2 min-h-[20px] bg-white border border-gray-300 rounded-2xl shadow-md hover:bg-gray-200 transition-all duration-300"
                       onClick={() => handleSuggestionClick(s)}
                     >
-                      <div className="absolute top-2 left-2 text-gray-400 text-lg">
+                      <div className="absolute top-2 left-2 text-gray-400 text-sm">
                         💬
                       </div>
                       <div className="pl-7 text-sm text-gray-800 leading-snug tracking-tight line-clamp-2">
@@ -302,7 +302,7 @@ const ChatBot = () => {
                       </div>
 
                       {/* Tooltip on hover */}
-                      <div className="w-24 absolute left-1/2 -top-20 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 whitespace-pre-line max-w-sm">
+                      <div className="w-24 absolute left-1/2 -top-20 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50 whitespace-pre-line max-w-sm pointer-events-none">
                         {s}
                       </div>
                     </motion.div>
@@ -313,52 +313,51 @@ const ChatBot = () => {
           </AnimatePresence>
 
           {/* Input Section */}
-         {/* Input Section */}
-{/* Input Section */}
-{/* Input Section */}
-<div className="flex items-center border-t p-3 bg-gray-100 space-x-2">
-  {/* Input Field */}
-  <input
-    type="text"
-    className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
-    placeholder="Type your message..."
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-  />
 
-  {/* Send Button just right of input */}
-  <button
-    className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 flex items-center justify-center"
-    onClick={handleSendMessage}
-    disabled={loading}
-  >
-    <Send size={20} />
-  </button>
+          <div className="flex items-center border-t p-3 bg-gray-100 space-x-2">
+            {/* Input Field */}
+            <input
+              type="text"
+              className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+              placeholder="Type your message..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+            />
 
-  {/* Language Buttons on the far right */}
-  <div className="flex space-x-2">
-    <button
-      onClick={() => setLanguage(false)}
-      className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-        !language ? "bg-gray-800 text-white" : "bg-white text-gray-800 border border-gray-300"
-      } hover:shadow`}
-    >
-      EN
-    </button>
-    <button
-      onClick={() => setLanguage(true)}
-      className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-        language ? "bg-gray-800 text-white" : "bg-white text-gray-800 border border-gray-300"
-      } hover:shadow`}
-    >
-      HI
-    </button>
-  </div>
-</div>
+            {/* Send Button just right of input */}
+            <button
+              className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 flex items-center justify-center"
+              onClick={handleSendMessage}
+              disabled={loading}
+            >
+              <Send size={20} />
+            </button>
 
-
-
+            {/* Language Buttons on the far right */}
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setLanguage(false)}
+                className={`px-3 py-1 rounded-lg text-sm font-semibold ${
+                  !language
+                    ? "bg-gray-800 text-white"
+                    : "bg-white text-gray-800 border border-gray-300"
+                } hover:shadow`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLanguage(true)}
+                className={`px-3 py-1 rounded-lg text-sm font-semibold ${
+                  language
+                    ? "bg-gray-800 text-white"
+                    : "bg-white text-gray-800 border border-gray-300"
+                } hover:shadow`}
+              >
+                HI
+              </button>
+            </div>
+          </div>
         </motion.div>
       </div>
     </div>
