@@ -1,20 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
-
-const Search1 = lazy(() => import("./component/Search1"));
-const ChatBot = lazy(() => import("./component/ChatBot"));
+import Search1 from "./component/Search1";
+import ChatBot from "./component/ChatBot";
+ 
 
 function App() {
   return (
     <Router>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/" element={<Search1 />} />
-          <Route path="/ChatBot" element={<ChatBot />} />
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route path="/" element={<Search1 />} />
+        <Route path="/ChatBot" element={<ChatBot />} />
+      </Routes>
     </Router>
+
+    
+     
   );
 }
 
 export default App;
+
+ 
