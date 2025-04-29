@@ -13,7 +13,9 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import backgroundImage from "../assets/udyami_image.jpg";
 import nitishKumarImage from "../assets/cm1.png";
+import nitishMishra from "../assets/Nitish_Mishra1.png";
 import Footer from "./Footer";
+import Header from "./Header";
 
 const Search1 = () => {
   const [query, setQuery] = useState("");
@@ -95,6 +97,8 @@ const Search1 = () => {
 
   return (
     <div className="relative  w-full flex flex-col">
+      {/* header section */}
+      <Header />
       <div
         className="flex h-screen w-full bg-cover "
         style={{
@@ -126,7 +130,7 @@ const Search1 = () => {
             <div className="relative w-full">
               {/* Title Text aligned left */}
               <h2 className="text-xl font-semibold text-white mb-2 ml-4">
-                Search Scheme
+                Udyami Scheme
               </h2>
               {/* input field */}
               <input
@@ -191,9 +195,9 @@ const Search1 = () => {
         {/* Right Image */}
         <div className="hidden md:flex w-1/3 items-center justify-center">
           <img
-            src={nitishKumarImage}
-            alt="Nitish Kumar"
-            className="rounded-2xl shadow-2xl max-h-[80%] object-cover"
+            src={nitishMishra}
+            alt="Nitish Mishra"
+            className="rounded-2xl shadow-2xl max-h-[35%] object-cover"
           />
         </div>
       </div>
@@ -206,10 +210,18 @@ const Search1 = () => {
             What is Udyami Yojna?
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed">
-            Udyami Yojna is a government initiative aimed at empowering aspiring
-            entrepreneurs by providing financial support, mentorship, and
-            training. It helps individuals start and grow their businesses,
-            contributing to economic development and employment generation.
+            The <span className="font-semibold">Udyami Yojana</span>, also known
+            as the{" "}
+            <span className="font-semibold">
+              Prime Minister’s Employment Generation Programme (PMEGP)
+            </span>{" "}
+            or sometimes referred to under various state-level "Mukhyamantri
+            Udyami Yojana", is a government initiative aimed at promoting
+            entrepreneurship, especially among youth and marginalized sections
+            of society. The specifics can vary depending on whether you're
+            referring to the{" "}
+            <span className="font-semibold">central scheme</span> or a{" "}
+            <span className="font-semibold">state-specific version</span>.
           </p>
         </div>
 
@@ -224,25 +236,65 @@ const Search1 = () => {
       </div>
 
       {/* Info Section 2 */}
-<div className="flex flex-col md:flex-row items-center justify-center w-full px-6 py-12 bg-gray-100">
-  {/* Left: Image */}
-  <div className="md:w-1/2 flex justify-center">
-    <img
-      src="\src\assets\Undraw_image1.svg"
-      alt="Training and Mentorship"
-      className="w-80 h-80 object-contain"
-    />
-  </div>
-  {/* Right: Text */}
-  <div className="md:w-1/2 mb-8 md:mb-0 md:pl-10">
-    <h2 className="text-3xl font-bold text-gray-800 mb-4">
-      Training and Mentorship
-    </h2>
-    <p className="text-gray-600 text-lg leading-relaxed">
-      The scheme also offers professional training and mentorship programs to guide entrepreneurs at every step of their journey.
-    </p>
-  </div>
-</div>
+      <div className="flex flex-col md:flex-row items-center justify-center w-full px-6 py-12 bg-gray-100">
+        {/* Left: Image */}
+        <div className="md:w-1/2 flex justify-center">
+          <img
+            src="\src\assets\Undraw_image1.svg"
+            alt="Training and Mentorship"
+            className="w-80 h-80 object-contain"
+          />
+        </div>
+        {/* Right: Text */}
+        <div className="md:w-1/2 mb-8 md:mb-0 md:pl-10">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            मुख्यमंत्री उद्यमी एवंलघुउद्यमी योजनाए
+          </h2>
+          <p className="text-gray-700 text-lg leading-relaxed">
+            <p className="text-gray-500">
+              <span className="font-semibold text-gray-800">1. परिचय</span>: यह दस्तावेज़
+              विभिन्न मुख्यमंत्री उद्यमी योजनाओं एवंबिहार लघुउद्यमी योजना
+              सेसम्बंधित नीतियों, उद्देश्यों, कार्यप्रणाली, और प्रशिक्षण
+              प्रक्रियाओं की जानकारी को सुव्यवस्थित रूप मेंप्रस्तुत करता है।
+              इसका उद्देश्य नीति निर्धारकों, कार्यान्वयन अधिकारियों
+              एवंप्रशिक्षणार्थियों केलिए एक स्पष्ट संदर्भसामग्री उपलब्ध कराना
+              है।
+            </p>
+            <p className="text-gray-600 mt-1">
+              <span className="font-semibold text-gray-800">
+                2. योजना के उद्देश्य एवंआवश्यकता
+              </span>{" "}
+              <p className="font-semibold text-gray-700">2.1. उद्देश्य :</p>{" "}
+              <ul>
+                <li>• राज्य मेंसूक्ष्म एवंलघुउद्योगों को बढ़ावा देना</li>
+                <li>• उद्योग स्थापनाओं मेंअर्हता पैदा करना</li>
+                <li>• स्व-रोजगार का सृजन करना</li>
+              </ul>
+            </p>
+            <p className="mt-1 text-gray-600">
+              <span className="font-semibold ">2.2. योजना की आवश्यकता</span>:{" "}
+              <ul>
+                <li className="ml-2">• बैंक द्वारा ऋण उपलब्ध करानेके बदलेप्रितभूत एवंमाजिरन मनी की मांग को पूरा करना
+                </li>
+                <li className="ml-2">
+                • उद्यमियों को वित्तीय सहायता एवंप्रशिक्षण प्रदान कर उद्यमशीलता की क्षमता को बढ़ाना.
+                </li>
+                
+              </ul>
+            </p>
+            <p className="mt-1 text-gray-600">
+              <span className="font-semibold text-gray-800">3. मुख्य योजना अवयव एवंवित्तीय सहायता</span>:  <p>मुख्यमंत्री उद्यमी योजनाएँकु ल पाँच अवयवों मेंविभाजित हैं:</p>
+              <ul>
+                <li>1. अनुसूचित जात एवंअनुसूचित जनजात उद्यमी योजना</li>
+                <li>2. अति पिछड़ा उद्यमी योजना</li>
+                <li>3. युवा उद्यमी योजना</li>
+                <li>5. अल्पसंख्यक उद्यमी योजना</li>
+              </ul>
+            </p>
+ 
+          </p>
+        </div>
+      </div>
 
       {/* footer */}
       <div>
